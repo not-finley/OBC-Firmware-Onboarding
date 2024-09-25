@@ -4,11 +4,8 @@
 #include "errors.h"
 
 typedef enum {
-  THERMAL_MGR_EVENT_INTERUPT,
-  
-} thermal_mgr_event_type_t;
-typedef enum {
   THERMAL_MGR_EVENT_MEASURE_TEMP_CMD,
+  THERMAL_MGR_EVENT_INTERUPT,
   
 } thermal_mgr_event_type_t;
 

@@ -47,8 +47,8 @@ error_code_t thermalMgrSendEvent(thermal_mgr_event_t *event) {
 }
 
 void osHandlerLM75BD(void) {
-  thermal_mgr_event_t *event = THERMAL_MGR_EVENT_INTERUPT;
-  xQueueSend(thermalMgrQueueHandle, event, 0);
+  thermal_mgr_event_type_t event = THERMAL_MGR_EVENT_INTERUPT;
+  xQueueSend(thermalMgrQueueHandle, &event, 0);
 }
 
 static void thermalMgr(void *pvParameters) {

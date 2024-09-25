@@ -33,13 +33,20 @@ error_code_t readTempLM75BD(uint8_t devAddr, float *temp) {
   uint8_t tempData[2];
   int16_t rawTemperature;
 
-  i2cSendTo(devAddr, &pointerRegister, 1);
-  i2cReceiveFrom(devAddr, tempData, 2);
+  i2cSendTo(devAddr, &pointerRegister, sizeof(pointerRegister));
+  i2cReceiveFrom(devAddr, tempData, sizeof(tempData));
   
   rawTemperature = (tempData[0] << 8) | tempData[1];
-
-  rawTemperature >>= 4; 
-  *temp = rawTemperature * 0.0625;
+  //discards the 5 least significant bits
+  rawTemperature >>= 5; 
+  if (rawTemperature & 0x0400) {
+    // If the 11th bit is set, take the two's complement of the 11-bit number
+    rawTemperature |= 0xF800; 
+    *temp = rawTemperature * 0.125;
+  } else {
+      // If the 11th bit is not set, temperature is positive
+      *temp = rawTemperature * 0.125;
+  }
 
   return ERR_CODE_SUCCESS;
 }
